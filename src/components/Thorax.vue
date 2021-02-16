@@ -1,6 +1,6 @@
 <template>
     <div class="columns">
-        <div class="column has-background-white has-text-centered is-hidden-mobile" id="col-1" ref="col-1">
+        <div class="column has-background-white has-text-centered" id="col-1" ref="col-1">
           <p v-if="!posts" class="content is-small has-text-grey has-text-weight-semibold">
             No blog posts found
           </p>
@@ -45,7 +45,7 @@
         <div class="column is-three-fifths">
           <router-view></router-view>
         </div>
-        <div class="column is-hidden-mobile">
+        <div class="column">
           <template>
             <section v-if="postMeta && postMeta.tags && postMeta.tags.trim().length > 0">
               <b-field v-for="tag in postMeta.tags.split(',')" :key="tag.trim()">
@@ -78,6 +78,8 @@ export default {
       return undefined;
     },
   },
+  created() {
+  },
   data() {
     return {
       htmlPart: undefined,
@@ -105,27 +107,32 @@ export default {
         id: id,
         url: title.replaceAll(/[^a-zA-Z\d\s:]/g, '').replaceAll(/[\s:]/g,'-')
       }});
+    },
+    showPostWithId(id){
+      if(this.posts){
+        this.isOpen = this.getIndexOfPostWithId(this.posts, id);
+      }
     }
   },
   mixins: [zUtils],
   mounted: function(){
-    if(this.urlNeedsRedirect()){
-      let id = this.getRedirectIdFromUrl();
-      console.log(`Found ${id} in url. Redirecting...`);
-      this.redirectedPostId = id.split('/')[0];
-      this.$router.push({name: "Post", params: {
-        id: id.split('/')[0],
-        url: id.split('/').pop()
-      }});
-    } else {//there is no `?id=<post-id>` in the url
-      console.log(`User is on the blog. Loading all posts...`);
+    if(!this.posts) {
+      console.log("Mounted::Loading posts");
       this.getPosts();
+    }
+    //user arrived via a direct link
+    if(this.urlNeedsRedirect()){
+      this.redirectedPostId = this.getRedirectIdFromUrl().split('/')[0];
+      console.log(`Mounted::RedirectedPostId = ${this.redirectedPostId}`);
+    } else if(this.userIsOnBlog()){
+      this.isOpen = 0; //show the first post
     }
   },
   watch: {
     isOpen: function(neww){
-      if(typeof neww !== 'undefined'){
+      if(typeof neww !== 'undefined' && this.posts){
         let post = this.posts.data[neww];
+        console.log(`Opening ${post.id} with title = ${post.post_title}`);
         this.showPost(post.id, post.post_title);
       }
     },
@@ -135,22 +142,23 @@ export default {
       this.htmlPart = URL.createObjectURL(x);
     },
     posts: function(neww){
+      console.log("Thorax:Watch:Posts::Posts loaded");
       this.isOpen = undefined;
       if(neww && neww.data.length > 0) {
-        this.isOpen = 0;
-        if(this.redirectedPostId){
-          let vm = this;
-          let idx = neww.data.find((post, index) => {
-            if(vm.getIdFromFilepath(post.filepath) === vm.redirectedPostId) return index;
-          });
-          if(typeof idx !== 'undefined') this.isOpen = idx;
+        if(this.redirectedPostId){//show the post the user landed on
+          this.showPostWithId(this.redirectedPostId);
           this.redirectedPostId = undefined;
+        } else {
+            this.isOpen = 0; //show the first post
         }
       }
     },
-    $route(to, from) {
-      console.log(`Thorax`, to, from);
-    }
+    redirectedPostId: function(neww){
+      if(neww && this.posts){
+        this.showPostWithId(neww);
+        this.redirectedPostId = undefined;
+      }
+    },
   },
 };
 </script>

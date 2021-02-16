@@ -2,7 +2,7 @@
     <div>
         <h1 v-if="post">{{subject}}</h1>
         <h1 v-else>Loading...</h1>
-        <embed v-if="post" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;min-height:1920px;width:100%;" height="100vh" width="100vw" v-bind:src="htmlPart"/>
+        <iframe id="embedded-post" v-if="post" style="height:fit-content;overflow:hidden;overflow-x:hidden;overflow-y:hidden;min-height:1920px;width:100%;" v-bind:src="htmlPart"/>
     </div>
 </template>
 
@@ -33,12 +33,16 @@ export default {
     props: ['id', 'url'],
     watch: {
         post: function(neww){
+            if(this.htmlPart) {
+                URL.revokeObjectURL(this.htmlPart);
+                this.htmlPart = undefined;
+            }
             this.subject = neww.data.subject;
             let x = new Blob([neww.data.html], { type: 'text/html' });
             this.htmlPart = URL.createObjectURL(x);
         },
         $route(to, from){
-            console.log(`Post`, `to`, to, `from`, from);
+            console.log(`Post:Watch:$route`, `to`, to, `from`, from);
             let post = this.getPostWithId(this.posts, to.params.id);
             this.$store.dispatch('getPost', {key: post.filepath});
         }
