@@ -33,10 +33,6 @@ export default {
     props: ['id', 'url'],
     watch: {
         post: function(neww){
-            if(this.htmlPart) {
-                URL.revokeObjectURL(this.htmlPart);
-                this.htmlPart = undefined;
-            }
             this.subject = neww.data.subject;
             let x = new Blob([neww.data.html], { type: 'text/html' });
             this.htmlPart = URL.createObjectURL(x);
