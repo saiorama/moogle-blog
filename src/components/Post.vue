@@ -2,7 +2,7 @@
     <div>
         <h1 v-if="post">{{subject}}</h1>
         <h1 v-else>Loading...</h1>
-        <iframe id="embedded-post" v-if="post" style="height:fit-content;overflow:hidden;overflow-x:hidden;overflow-y:hidden;min-height:1920px;width:100%;" v-bind:src="htmlPart"/>
+        <div v-if="post" v-html="rawHtml" class="has-text-left"></div>
     </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
     },
     data() {
         return {
-            htmlPart: undefined,
+            rawHtml: undefined,
             subject: undefined,
         }
     },
@@ -34,8 +34,7 @@ export default {
     watch: {
         post: function(neww){
             this.subject = neww.data.subject;
-            let x = new Blob([neww.data.html], { type: 'text/html' });
-            this.htmlPart = URL.createObjectURL(x);
+            this.rawHtml = neww.data.html;
         },
         $route(to, from){
             console.log(`Post:Watch:$route`, `to`, to, `from`, from);
