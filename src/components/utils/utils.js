@@ -10,15 +10,15 @@ export const zUtils = {
       getIdFromFilepath: function(filepath){
         return filepath.split('/').pop().split('-').pop().substr(0, 6);
       },
+      getIdFromUrl: function() {
+        let sp = new URLSearchParams(window.location.search);
+        return sp && sp.has("id") ? sp.get("id") : undefined;
+      },
       getIndexOfPostWithId: function(posts, id){
         return posts.data.findIndex(post => this.getIdFromFilepath(post.filepath) === id);
       },
       getPostWithId: function(posts, id){
         return posts.data.find(post => this.getIdFromFilepath(post.filepath) === id);
-      },
-      getRedirectIdFromUrl: function() {
-        let sp = new URLSearchParams(window.location.search);
-        return sp && sp.has("id") ? sp.get("id") : undefined;
       },
       stripHandlebarsAroundKey: function(text, key) {
         const LEADING_HANDLEBARS = "{{";
@@ -35,13 +35,13 @@ export const zUtils = {
       sortAsDates: function(array){
         return array.sort((a, b) => new Date(a) - new Date(b));
       },
+      urlContainsPostId: function() {
+        let sp = new URLSearchParams(window.location.search);
+        return sp && sp.has("id");
+      },
       userIsOnBlog: function() {
         let url = new URL(window.location);
         return url.pathname === '/blog' || url.pathname === '/blog/';
-      },
-      urlNeedsRedirect: function() {
-        let sp = new URLSearchParams(window.location.search);
-        return sp && sp.has("id");
       },
     }
   }

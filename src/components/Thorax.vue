@@ -43,7 +43,11 @@
           </div>
         </div>
         <div class="column is-three-fifths">
-          <router-view></router-view>
+          <div>
+            <h1 v-if="post">{{subject}}</h1>
+            <h1 v-else>Loading...</h1>
+            <div v-if="post" v-html="rawHtml" class="has-text-left"></div>
+        </div>
         </div>
         <div class="column">
           <template>
@@ -82,10 +86,10 @@ export default {
   },
   data() {
     return {
-      htmlPart: undefined,
+      currentPostId: undefined,
       isOpen: undefined,
       postMeta: undefined, //meta details about the post
-      redirectedPostId: undefined,
+      rawHtml: undefined,
       sesStatsModalIsVisible: undefined,
       showTextVersion: false,
       subject: undefined,
@@ -103,10 +107,14 @@ export default {
     },
     showPost(id, title){
       this.postMeta = this.getPostWithId(this.posts, id);
-      this.$router.push({name: "Post", params: {
-        id: id,
-        url: title.replaceAll(/[^a-zA-Z\d\s:]/g, '').replaceAll(/[\s:]/g,'-')
-      }});
+      let idInUrl = this.getIdFromUrl();
+      if(idInUrl === undefined || id !== idInUrl.split('/')[0]){
+        this.$router.push({name: "Home", query: {
+          id: id,
+          url: title.replaceAll(/[^a-zA-Z\d\s:]/g, '').replaceAll(/[\s:]/g,'-')
+        }});
+      }
+      this.$store.dispatch('getPost', {key: `${this.postMeta.filepath}`});
     },
     showPostWithId(id){
       if(this.posts){
@@ -116,19 +124,24 @@ export default {
   },
   mixins: [zUtils],
   mounted: function(){
+    //user arrived via a direct link
+    if(this.urlContainsPostId()){
+      this.currentPostId = this.getIdFromUrl().split('/')[0];
+      console.log(`Mounted::currentPostId = ${this.currentPostId}`);
+    } else if(this.userIsOnBlog()){
+      this.isOpen = 0; //show the first post
+    }
     if(!this.posts) {
       console.log("Mounted::Loading posts");
       this.getPosts();
     }
-    //user arrived via a direct link
-    if(this.urlNeedsRedirect()){
-      this.redirectedPostId = this.getRedirectIdFromUrl().split('/')[0];
-      console.log(`Mounted::RedirectedPostId = ${this.redirectedPostId}`);
-    } else if(this.userIsOnBlog()){
-      this.isOpen = 0; //show the first post
-    }
   },
   watch: {
+    currentPostId: function(neww){
+      if(neww && this.posts){
+        this.showPostWithId(neww);
+      }
+    },
     isOpen: function(neww){
       if(typeof neww !== 'undefined' && this.posts){
         let post = this.posts.data[neww];
@@ -137,28 +150,26 @@ export default {
       }
     },
     post: function(neww){
+      this.rawHtml = neww.data.html;
       this.subject = neww.data.subject;
-      let x = new Blob([neww.data.html], { type: 'text/html' });
-      this.htmlPart = URL.createObjectURL(x);
+      document.title = this.subject;
     },
     posts: function(neww){
-      console.log("Thorax:Watch:Posts::Posts loaded");
       this.isOpen = undefined;
       if(neww && neww.data.length > 0) {
-        if(this.redirectedPostId){//show the post the user landed on
-          this.showPostWithId(this.redirectedPostId);
-          this.redirectedPostId = undefined;
+        if(this.currentPostId){//show the post the user landed on
+          this.showPostWithId(this.currentPostId);
+          this.currentPostId = undefined;
         } else {
             this.isOpen = 0; //show the first post
         }
       }
     },
-    redirectedPostId: function(neww){
-      if(neww && this.posts){
-        this.showPostWithId(neww);
-        this.redirectedPostId = undefined;
+    $route: function(to){
+      if(to.query.id){
+        this.currentPostId = to.query.id;
       }
-    },
+    }
   },
 };
 </script>

@@ -38,7 +38,7 @@ export default {
         },
         $route(to, from){
             console.log(`Post:Watch:$route`, `to`, to, `from`, from);
-            let post = this.getPostWithId(this.posts, to.params.id);
+            let post = this.getPostWithId(this.posts, to.query.id);
             this.$store.dispatch('getPost', {key: post.filepath});
         }
     }

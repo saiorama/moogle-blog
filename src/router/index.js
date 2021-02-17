@@ -18,7 +18,8 @@ const routes = [
     children: [{
       component: Post,
       name: 'Post',
-      path: 'post/:id/:url',
+      // path: 'post/:id/:url',
+      path: 'post/',
       props: true,
     },],
     component: Home,
