@@ -109,7 +109,7 @@ export default {
       this.postMeta = this.getPostWithId(this.posts, id);
       let idInUrl = this.getIdFromUrl();
       if(idInUrl === undefined || id !== idInUrl.split('/')[0]){
-        this.$router.push({name: "Home", query: {
+        this.$router.push({path: "/blog/", query: {
           id: id,
           url: title.replaceAll(/[^a-zA-Z\d\s:]/g, '').replaceAll(/[\s:]/g,'-')
         }});
@@ -125,11 +125,13 @@ export default {
   mixins: [zUtils],
   mounted: function(){
     //user arrived via a direct link
-    if(this.urlContainsPostId()){
+    console.log(`Route =`, this.$route);
+    if(this.urlContainsPostId(this.$route)){
       this.currentPostId = this.getIdFromUrl().split('/')[0];
       console.log(`Mounted::currentPostId = ${this.currentPostId}`);
     } else if(this.userIsOnBlog()){
-      this.isOpen = 0; //show the first post
+      console.log(`Mounted::User is /blog. ${this.posts ? 'Showing first post': ''}`);
+      if(this.posts) this.isOpen = 0; //show the first post
     }
     if(!this.posts) {
       console.log("Mounted::Loading posts");

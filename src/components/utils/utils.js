@@ -11,8 +11,7 @@ export const zUtils = {
         return filepath.split('/').pop().split('-').pop().substr(0, 6);
       },
       getIdFromUrl: function() {
-        let sp = new URLSearchParams(window.location.search);
-        return sp && sp.has("id") ? sp.get("id") : undefined;
+        return this.$route.query.id;
       },
       getIndexOfPostWithId: function(posts, id){
         return posts.data.findIndex(post => this.getIdFromFilepath(post.filepath) === id);
@@ -36,12 +35,11 @@ export const zUtils = {
         return array.sort((a, b) => new Date(a) - new Date(b));
       },
       urlContainsPostId: function() {
-        let sp = new URLSearchParams(window.location.search);
-        return sp && sp.has("id");
+        return this.$route && this.$route.query.id;
       },
       userIsOnBlog: function() {
-        let url = new URL(window.location);
-        return url.pathname === '/blog' || url.pathname === '/blog/';
+        return this.$route && (this.$route.fullPath === '/blog' ||
+        this.$route.fullPath === '/blog/')
       },
     }
   }
