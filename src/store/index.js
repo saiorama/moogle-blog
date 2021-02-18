@@ -5,7 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 const HOST = (new URL(window.location));
 const DOMAIN = HOST.hostname === 'localhost' ? 'https://moogle.cc' : HOST.origin;
-const POSTS_URL = `${DOMAIN}/posts/index.json`;
+const POSTS_URL = `${DOMAIN}/blog/index.json`;
 const POST_URL = `${DOMAIN}/post?domain=${DOMAIN}&id=`;
 let store = new Vuex.Store({
   state: {

@@ -1,0 +1,16 @@
+[
+{
+  "filepath": "blogposts/2021-02-14-1613307388425-6ar5m37m3idpog6p62a11rno17ka736qrjlniho1",
+  "post_title": "This post was written in my inbox",
+  "post_excerpt": "Self host your blog on S3. Use your email client to write lovely posts!",
+  "author": "Sai Ramachandran",
+  "published_unix_ts" : 1613307723,
+  "tags": "Blogging, S3, Netlify, Ghost, Hugo, Jekyll, Lambda"
+},{
+  "filepath": "blogposts/2021-02-11-1613037283413-dtfe6kd0ek6rluch71frtcp9de5c3nkm3f3laqo1",
+  "post_title": "Moogle in the classroom",
+  "post_excerpt": "Centralize classroom instructions and sidebar converations in a single url. Avoid interminable email threads which are often not relevant to everyone.",
+  "author": "Sai Ramachandran",
+  "published_unix_ts" : 1613041392,
+  "tags": "AWS, SES, Moogle"
+}]
