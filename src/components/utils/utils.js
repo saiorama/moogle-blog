@@ -11,7 +11,7 @@ export const zUtils = {
         return filepath.split('/').pop().split('-').pop().substr(0, 6);
       },
       getIdFromUrl: function() {
-        return this.$route.query.id;
+        return this.$route.params.id;
       },
       getIndexOfPostWithId: function(posts, id){
         return posts.data.findIndex(post => this.getIdFromFilepath(post.filepath) === id);
@@ -35,7 +35,7 @@ export const zUtils = {
         return array.sort((a, b) => new Date(a) - new Date(b));
       },
       urlContainsPostId: function() {
-        return this.$route && this.$route.query.id;
+        return this.$route && this.$route.params.id;
       },
       userIsOnBlog: function() {
         return this.$route && (this.$route.fullPath === '/blog' ||

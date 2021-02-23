@@ -44,9 +44,10 @@
         </div>
         <div class="column is-three-fifths">
           <div>
-            <h1 v-if="post">{{subject}}</h1>
+            <!--<h1 v-if="post">{{subject}}</h1>
             <h1 v-else>Loading...</h1>
-            <div v-if="post" v-html="rawHtml" class="has-text-left"></div>
+            <div v-if="post" v-html="rawHtml" class="has-text-left"></div>-->
+            <router-view></router-view>
         </div>
         </div>
         <div class="column">
@@ -109,7 +110,7 @@ export default {
       this.postMeta = this.getPostWithId(this.posts, id);
       let idInUrl = this.getIdFromUrl();
       if(idInUrl === undefined || id !== idInUrl.split('/')[0]){
-        this.$router.push({path: "/blog/", query: {
+        this.$router.push({name: "Post", params: {
           id: id,
           url: title.replaceAll(/[^a-zA-Z\d\s:]/g, '').replaceAll(/[\s:]/g,'-')
         }});
@@ -130,7 +131,7 @@ export default {
       this.currentPostId = this.getIdFromUrl().split('/')[0];
       console.log(`Mounted::currentPostId = ${this.currentPostId}`);
     } else if(this.userIsOnBlog()){
-      console.log(`Mounted::User is /blog. ${this.posts ? 'Showing first post': ''}`);
+      console.log(`Mounted::User is on /blog/. ${this.posts ? 'Showing first post': ''}`);
       if(this.posts) this.isOpen = 0; //show the first post
     }
     if(!this.posts) {
@@ -168,8 +169,8 @@ export default {
       }
     },
     $route: function(to){
-      if(to.query.id){
-        this.currentPostId = to.query.id;
+      if(to.params.id){
+        this.currentPostId = to.params.id;
       }
     }
   },
