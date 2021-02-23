@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>https://moogle.cc/</loc>
+		<lastmod>2021-02-22</lastmod>
+	</url>
+	<url>
+		<loc>https://moogle.cc/blog/</loc>
+		<lastmod>2021-02-23</lastmod>
+	</url>
+	<url>
+		<loc>https://moogle.cc/blog/post/dfgmkr/Opening-the-Kimono--how-we-built-a-fully-functioning-blog-with-just-two-components</loc>
+		<lastmod>2021-02-23</lastmod>
+	</url>
+	<url>
+		<loc>https://moogle.cc/blog/post/6ar5m3/This-post-was-written-in-my-inbox</loc>
+		<lastmod>2021-02-14</lastmod>
+	</url>
+	<url>
+		<loc>https://moogle.cc/blog/post/dtfe6k/Moogle-in-the-classroom</loc>
+		<lastmod>2021-02-10</lastmod>
+	</url>
+</urlset>
