@@ -1,5 +1,11 @@
-[
-{
+[{
+  "filepath": "blogposts/2021-02-23-1614064608578-dfgmkras7gglk9d1sf3tgbd6fmedf5f1lbknmh81",
+  "post_title": "Opening the Kimono - how we built a fully functioning blog with just two components",
+  "post_excerpt": "How we built a Vuejs SPA to host our blog on S3 and in the process, invented a whole new way to add blogs to your website! The Markdown free, serverless, email based blogging platform for the no-code/low-code generation.",
+  "author": "Sai Ramachandran",
+  "published_unix_ts" : 1614065364,
+  "tags": "Blogging, S3, Netlify, Ghost, Hugo, Jekyll, Lambdai, Vuejs, Vuex, JAMStack"
+},{
   "filepath": "blogposts/2021-02-14-1613307388425-6ar5m37m3idpog6p62a11rno17ka736qrjlniho1",
   "post_title": "This post was written in my inbox",
   "post_excerpt": "Self host your blog on S3. Use your email client to write lovely posts!",
